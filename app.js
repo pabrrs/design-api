@@ -1,13 +1,13 @@
-// Express
 const express = require('express')
-const routes = require('./routes')
+const categoriesRoute = require('./routes/categories-route')
 
-// Init express app
+// Inicializa express
 const app = express()
 
+// Habilita transações JSON
 app.use(express.json())
 
 // Routes
-app.use('/', routes)
+app.use(categoriesRoute)
 
 module.exports = app
