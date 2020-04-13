@@ -1,16 +1,18 @@
-const Categories = require('../models/Categories')
+const Categories = require('../models/categories')
 const NotFound = require('../errors/not-found')
+const convertQuery = require('../helpers/convert-query')
 
 /**
  * @typedef { Object } Category
  * @property { Number } id
  * @property { String } name
+ * @property { Array<Object> } products
  */
 
 module.exports = {
   /**
    * Extrai dados do modelo de categoria
-   * @param { Object } data
+   * @param { Object }
    * @returns { Category }
    */
   _serialize(data) {
@@ -22,7 +24,16 @@ module.exports = {
    * @returns {Promise<Array<Category>>}
    */
   async list({ filters }, { limit = 10, offset = 0 }) {
-    return []
+    const query = convertQuery(filters)
+    const { rows, count } = await Categories.findAndCountAll({
+      where: query,
+      limit,
+      offset
+    })
+    return {
+      _meta: { count, limit, offset },
+      data: rows
+    }
   },
 
   /**

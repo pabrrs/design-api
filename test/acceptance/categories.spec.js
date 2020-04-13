@@ -1,40 +1,61 @@
 const supertest = require('supertest')
-const Categories = require('../../models/Categories')
+const Categories = require('../../models/categories')
 const app = supertest(require('../../app'))
 
 describe('[Acceptance] Categories', () => {
-  let res
   describe('GET /categories', () => {
-    const fixtures = [
-      {
-        id: 1,
-        nome: 'Informática'
-      },
-      {
-        id: 2,
-        nome: 'Móveis'
-      }
-    ]
+    let fixtureIds
+    const fixtures = [{ name: 'Informática' }, { name: 'Móveis' }, { name: 'Esportes' }]
 
     before(async () => {
-      await Categories.bulkCreate([fixtures])
+      const categories = await Categories.bulkCreate(fixtures)
+      fixtureIds = categories.map(c => c.id)
     })
 
     after(async () => {
-      const fixtureIds = fixtures.map(f => f.id)
       await Categories.destroy({ where: { id: fixtureIds } })
     })
 
-    context('sem parâmetros', () => {
+    context('without params', () => {
+      let res
+
       before(async () => {
         res = await app.get('/categories')
       })
+      it('should return list of categories', async () => {
+        const { data } = res.body
+        const findCategories = fixtures.every(f => data.some(d => f.name === d.name))
+        expect(data.length).to.be.at.least(fixtures.length)
+        expect(findCategories).to.be.true
+      })
+    })
 
-      it('deve retornar lista de categorias', () => {
-        const categories = res.body
-        expect(categories).to.be.eql({
-          _meta: { count: 2, limit: 10, offset: 1 },
-          data: fixtures
+    context('with params', () => {
+      context('when filter by "name"', () => {
+        let res
+
+        before(async () => {
+          res = await app.get('/categories').query({ name: 'Informática' })
+        })
+        it('should return only "Informática"', async () => {
+          expect(res.body.data.length).to.be.at.least(1)
+          expect(res.body.data[0]).to.include({
+            name: 'Informática'
+          })
+        })
+      })
+
+      context('when filter by "name__contains"', () => {
+        let res
+
+        before(async () => {
+          res = await app.get('/categories').query({ name__contains: 'sport' })
+        })
+        it('should return only "Esportes"', async () => {
+          expect(res.body.data.length).to.be.at.least(1)
+          expect(res.body.data[0]).to.include({
+            name: 'Esportes'
+          })
         })
       })
     })
