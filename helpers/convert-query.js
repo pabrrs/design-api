@@ -8,7 +8,11 @@ const { Op } = require('sequelize')
 module.exports = filters => {
   const fields = Object.keys(filters)
   return fields.reduce((acc, field) => {
-    const value = filters[field]
+    const value = filters[field.toString()]
+
+    // Caso o campo exista porém sem valor, ignora
+    if (!value) return acc
+
     if (field.includes('__contains')) {
       const fieldName = field.replace('__contains', '')
       return Object.assign(acc, { [fieldName]: { [Op.like]: `%${value}%` } })

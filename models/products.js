@@ -1,6 +1,6 @@
 const { Model, Sequelize } = require('sequelize')
 const mysql = require('../clients/mysql')
-const Categories = require('./Categories')
+const Categories = require('./categories')
 
 class Products extends Model {}
 

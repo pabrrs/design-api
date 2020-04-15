@@ -29,4 +29,9 @@ describe('[Unit] helpers/convert-query', () => {
       expect(query).to.deep.equal({ email: 'john@doe.io' })
     })
   })
+
+  context('field with undefined value', () => {
+    const query = convertQuery({ name: 'Jor-El', city: undefined })
+    expect(query).to.deep.equal({ name: 'Jor-El' })
+  })
 })

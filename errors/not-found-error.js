@@ -1,10 +1,10 @@
-class NotFound extends Error {
+class NotFoundError extends Error {
   constructor({ message, statusCode }) {
     super(message)
-    this.name = 'NotFound'
+    this.name = 'NotFoundError'
     this.statusCode = statusCode
     Error.captureStackTrace(this, this.constructor)
   }
 }
 
-module.exports = NotFound
+module.exports = NotFoundError
