@@ -28,12 +28,16 @@ module.exports = {
 
     const { rows, count } = await Categories.findAndCountAll({
       where: query,
-      limit,
-      offset
+      limit: parseInt(limit),
+      offset: parseInt(offset)
     })
 
     return {
-      _meta: { count, limit, offset },
+      _meta: {
+        count,
+        limit: parseInt(limit),
+        offset: parseInt(offset)
+      },
       data: rows
     }
   },
