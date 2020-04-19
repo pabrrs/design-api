@@ -5,6 +5,11 @@ class Categories extends Model {}
 
 Categories.init(
   {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     name: Sequelize.STRING
   },
   {

@@ -6,6 +6,11 @@ class Products extends Model {}
 
 Products.init(
   {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     name: Sequelize.STRING,
     price: {
       type: Sequelize.DECIMAL(10, 2),
