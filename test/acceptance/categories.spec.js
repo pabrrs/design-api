@@ -5,7 +5,7 @@ const app = supertest(require('../../app'))
 describe('[Acceptance] Categories', () => {
   let res
   describe('GET /categories', () => {
-    const fixtures = [
+    const categoriesFixtures = [
       { id: 1, name: 'Decoração' },
       { id: 2, name: 'Esportes' },
       { id: 3, name: 'Informática' },
@@ -15,7 +15,7 @@ describe('[Acceptance] Categories', () => {
 
     before(async () => {
       await Categories.truncate()
-      await Categories.bulkCreate(fixtures)
+      await Categories.bulkCreate(categoriesFixtures)
     })
 
     after(async () => {
@@ -33,8 +33,8 @@ describe('[Acceptance] Categories', () => {
 
       it('should return list of categories', () => {
         const { _meta, data } = res.body
-        expect(_meta).to.have.property('count', fixtures.length)
-        expect(data).to.be.eql(fixtures)
+        expect(_meta).to.have.property('count', categoriesFixtures.length)
+        expect(data).to.be.eql(categoriesFixtures)
       })
 
       it('should default limit be 10', () => {
@@ -51,8 +51,8 @@ describe('[Acceptance] Categories', () => {
         const { _meta, data } = res.body
         expect(_meta).to.have.property('sort', 'name')
         expect(_meta).to.have.property('order', 'ASC')
-        expect(data[0]).to.be.eql(fixtures[0])
-        expect(data[4]).to.be.eql(fixtures[4])
+        expect(data[0]).to.be.eql(categoriesFixtures[0])
+        expect(data[4]).to.be.eql(categoriesFixtures[4])
       })
     })
 
@@ -65,9 +65,9 @@ describe('[Acceptance] Categories', () => {
 
           it('should limit results', () => {
             const { _meta, data } = res.body
-            expect(_meta).to.have.property('count', fixtures.length)
+            expect(_meta).to.have.property('count', categoriesFixtures.length)
             expect(_meta).to.have.property('limit', 3)
-            expect(data).to.be.eql([fixtures[0], fixtures[1], fixtures[2]])
+            expect(data).to.be.eql([categoriesFixtures[0], categoriesFixtures[1], categoriesFixtures[2]])
           })
         })
 
@@ -78,9 +78,9 @@ describe('[Acceptance] Categories', () => {
 
           it('should start from offset', () => {
             const { _meta, data } = res.body
-            expect(_meta).to.have.property('count', fixtures.length)
+            expect(_meta).to.have.property('count', categoriesFixtures.length)
             expect(_meta).to.have.property('offset', 3)
-            expect(data).to.be.eql([fixtures[3], fixtures[4]])
+            expect(data).to.be.eql([categoriesFixtures[3], categoriesFixtures[4]])
           })
         })
       })
@@ -94,8 +94,8 @@ describe('[Acceptance] Categories', () => {
             const { _meta, data } = res.body
             expect(_meta).to.have.property('sort', 'id')
             expect(_meta).to.have.property('order', 'ASC')
-            expect(data[0]).to.be.eql(fixtures[0])
-            expect(data[4]).to.be.eql(fixtures[4])
+            expect(data[0]).to.be.eql(categoriesFixtures[0])
+            expect(data[4]).to.be.eql(categoriesFixtures[4])
           })
         })
         context('when use order', () => {
@@ -107,8 +107,8 @@ describe('[Acceptance] Categories', () => {
             const { _meta, data } = res.body
             expect(_meta).to.have.property('sort', 'name')
             expect(_meta).to.have.property('order', 'DESC')
-            expect(data[0]).to.be.eql(fixtures[4])
-            expect(data[4]).to.be.eql(fixtures[0])
+            expect(data[0]).to.be.eql(categoriesFixtures[4])
+            expect(data[4]).to.be.eql(categoriesFixtures[0])
           })
         })
 
