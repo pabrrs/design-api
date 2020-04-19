@@ -3,22 +3,25 @@ const Categories = require('../../models/categories')
 const app = supertest(require('../../app'))
 
 describe('[Acceptance] Categories', () => {
+  let res
   describe('GET /categories', () => {
-    let fixtureIds
-    const fixtures = [{ name: 'Informática' }, { name: 'Móveis' }, { name: 'Esportes' }]
+    const fixtures = [
+      { id: 1, name: 'Esportes' },
+      { id: 2, name: 'Decoração' },
+      { id: 3, name: 'Informática' },
+      { id: 4, name: 'Móveis' },
+      { id: 5, name: 'Roupas' }
+    ]
 
     before(async () => {
-      const categories = await Categories.bulkCreate(fixtures)
-      fixtureIds = categories.map(c => c.id)
+      await Categories.bulkCreate(fixtures)
     })
 
     after(async () => {
-      await Categories.destroy({ where: { id: fixtureIds } })
+      await Categories.truncate()
     })
 
     context('without params', () => {
-      let res
-
       before(async () => {
         res = await app.get('/categories')
       })
@@ -27,49 +30,94 @@ describe('[Acceptance] Categories', () => {
         expect(res.status).to.be.eql(200)
       })
 
-      it('should return list of categories', async () => {
-        const { data } = res.body
-        const findCategories = fixtures.every(f => data.some(d => f.name === d.name))
-        expect(data.length).to.be.at.least(fixtures.length)
-        expect(findCategories).to.be.true
+      it('should return list of categories', () => {
+        const { _meta, data } = res.body
+        expect(_meta.count).to.be.eql(fixtures.length)
+        expect(data).to.be.eql(fixtures)
       })
     })
 
     context('with params', () => {
-      context('when filter by "name"', () => {
-        let res
+      context('pagination', () => {
+        context('without params', () => {
+          before(async () => {
+            res = await app.get('/categories').query({ limit: undefined, offset: undefined })
+          })
 
-        before(async () => {
-          res = await app.get('/categories').query({ name: 'Informática' })
+          it('should return data', () => {
+            const { _meta, data } = res.body
+            expect(_meta.count).to.be.eql(fixtures.length)
+            expect(data).to.be.eql(fixtures)
+          })
+
+          it('should limit default be 10', () => {
+            const { _meta } = res.body
+            expect(_meta.limit).to.be.eql(10)
+          })
+
+          it('should offset default be 0', () => {
+            const { _meta } = res.body
+            expect(_meta.offset).to.be.eql(0)
+          })
         })
 
-        it('should return status 200 (OK)', () => {
-          expect(res.status).to.be.eql(200)
+        context('when use limit', () => {
+          before(async () => {
+            res = await app.get('/categories').query({ limit: 3 })
+          })
+
+          it('should limit results', () => {
+            const { _meta, data } = res.body
+            expect(_meta.count).to.be.eql(fixtures.length)
+            expect(_meta.limit).to.be.eql(3)
+            expect(data).to.be.eql([fixtures[0], fixtures[1], fixtures[2]])
+          })
         })
 
-        it('should return only "Informática"', async () => {
-          expect(res.body.data.length).to.be.at.least(1)
-          expect(res.body.data[0]).to.include({
-            name: 'Informática'
+        context('when use offset', () => {
+          before(async () => {
+            res = await app.get('/categories').query({ offset: 3 })
+          })
+
+          it('should start from offset', () => {
+            const { _meta, data } = res.body
+            expect(_meta.count).to.be.eql(fixtures.length)
+            expect(_meta.offset).to.be.eql(3)
+            expect(data).to.be.eql([fixtures[3], fixtures[4]])
           })
         })
       })
+      context('sorting', () => {})
+      context('filters', () => {
+        context('when filter by "name"', () => {
+          before(async () => {
+            res = await app.get('/categories').query({ name: 'Informática' })
+          })
 
-      context('when filter by "name__contains"', () => {
-        let res
+          it('should return status 200 (OK)', () => {
+            expect(res.status).to.be.eql(200)
+          })
 
-        before(async () => {
-          res = await app.get('/categories').query({ name__contains: 'sport' })
+          it('should return only "Informática"', () => {
+            const { _meta, data } = res.body
+            expect(_meta.count).to.be.eql(1)
+            expect(data).to.be.eql([{ id: 3, name: 'Informática' }])
+          })
         })
 
-        it('should return status 200 (OK)', () => {
-          expect(res.status).to.be.eql(200)
-        })
+        context('when filter by "name__contains"', () => {
+          before(async () => {
+            res = await app.get('/categories').query({ name__contains: 'sport' })
+          })
 
-        it('should return only "Esportes"', async () => {
-          expect(res.body.data.length).to.be.at.least(1)
-          expect(res.body.data[0]).to.include({
-            name: 'Esportes'
+          it('should return status 200 (OK)', () => {
+            expect(res.status).to.be.eql(200)
+          })
+
+          it('should return only "Esportes"', () => {
+            const { _meta, data } = res.body
+            expect(_meta.count).to.be.eql(1)
+            expect(data).to.be.eql([{ id: 1, name: 'Esportes' }])
           })
         })
       })
@@ -77,23 +125,19 @@ describe('[Acceptance] Categories', () => {
   })
 
   describe('GET /categories/:id', () => {
-    let fixtureId
-    const fixture = { name: 'Alimentação' }
+    const fixture = { id: 1, name: 'Alimentação' }
 
     before(async () => {
-      const category = await Categories.create(fixture)
-      fixtureId = category.id
+      await Categories.create(fixture)
     })
 
     after(async () => {
-      await Categories.destroy({ where: { id: fixtureId } })
+      await Categories.truncate()
     })
 
     context('when category exists', () => {
-      let res
-
       before(async () => {
-        res = await app.get(`/categories/${fixtureId}`)
+        res = await app.get(`/categories/${fixture.id}`)
       })
 
       it('should return status 200 (Ok)', () => {
@@ -101,12 +145,10 @@ describe('[Acceptance] Categories', () => {
       })
 
       it('should return matching category', () => {
-        expect(res.body).to.have.property('name', fixture.name)
+        expect(res.body).to.be.eql(fixture)
       })
     })
     context('when category not exists', () => {
-      let res
-
       before(async () => {
         res = await app.get('/categories/99999999')
       })
@@ -126,15 +168,14 @@ describe('[Acceptance] Categories', () => {
 
   describe('POST /categories', () => {
     context('when all fields was given', () => {
-      let res
-      const fixture = { name: 'Tecnologia' }
+      const fixture = { id: 1, name: 'Tecnologia' }
 
       before(async () => {
         res = await app.post('/categories').send(fixture)
       })
 
       after(async () => {
-        await Categories.destroy({ where: { id: res.body.id } })
+        await Categories.truncate()
       })
 
       it('should return 201 (Created)', () => {
@@ -142,13 +183,11 @@ describe('[Acceptance] Categories', () => {
       })
 
       it('should return created category', () => {
-        expect(res.body).to.have.property('name', fixture.name)
+        expect(res.body).to.be.eql(fixture)
       })
     })
 
     context('when "name" is missing', () => {
-      let res
-
       before(async () => {
         res = await app.post('/categories').send({ name: '' })
       })
@@ -167,26 +206,22 @@ describe('[Acceptance] Categories', () => {
   })
 
   describe('PUT /categories/:id', () => {
-    let fixtureId
     let dbCategory
-    const oldFixture = { name: 'Massas' }
+    const oldFixture = { id: 1, name: 'Massas' }
     const newFixture = { name: 'Massas e Frios' }
 
     before(async () => {
-      const category = await Categories.create(oldFixture)
-      fixtureId = category.id
+      await Categories.create(oldFixture)
     })
 
     after(async () => {
-      await Categories.destroy({ where: { id: fixtureId } })
+      await Categories.truncate()
     })
 
     context('when category exists', () => {
-      let res
-
       before(async () => {
-        res = await app.put(`/categories/${fixtureId}`).send(newFixture)
-        dbCategory = await Categories.findByPk(fixtureId)
+        res = await app.put(`/categories/${oldFixture.id}`).send(newFixture)
+        dbCategory = await Categories.findByPk(oldFixture.id)
       })
 
       it('should return status 200 (Ok)', () => {
@@ -194,18 +229,16 @@ describe('[Acceptance] Categories', () => {
       })
 
       it('should return updated category', () => {
-        expect(res.body).to.have.property('id', fixtureId)
+        expect(res.body).to.have.property('id', oldFixture.id)
         expect(res.body).to.have.property('name', newFixture.name)
       })
 
       it('should update category in database', () => {
-        expect(dbCategory).to.have.property('id', fixtureId)
+        expect(dbCategory).to.have.property('id', oldFixture.id)
         expect(dbCategory).to.have.property('name', newFixture.name)
       })
     })
     context('when category not exists', () => {
-      let res
-
       before(async () => {
         res = await app.put('/categories/99999999').send({ name: 'new name' })
       })
@@ -223,10 +256,8 @@ describe('[Acceptance] Categories', () => {
     })
 
     context('when "name" is missing', () => {
-      let res
-
       before(async () => {
-        res = await app.put(`/categories/${fixtureId}`).send({ name: '' })
+        res = await app.put(`/categories/${oldFixture.id}`).send({ name: '' })
       })
 
       it('should return 422 (Unprocessable Entity)', () => {
@@ -243,21 +274,17 @@ describe('[Acceptance] Categories', () => {
   })
 
   describe('DELETE /categories/:id', () => {
-    let fixtureId
     let dbCategory
-    const fixture = { name: 'Moda' }
+    const fixture = { id: 1, name: 'Moda' }
 
     before(async () => {
-      const category = await Categories.create(fixture)
-      fixtureId = category.id
+      await Categories.create(fixture)
     })
 
     context('when category exists', () => {
-      let res
-
       before(async () => {
-        res = await app.delete(`/categories/${fixtureId}`)
-        dbCategory = await Categories.findByPk(fixtureId)
+        res = await app.delete(`/categories/${fixture.id}`)
+        dbCategory = await Categories.findByPk(fixture.id)
       })
 
       it('should return status 204 (No Content)', () => {
@@ -273,8 +300,6 @@ describe('[Acceptance] Categories', () => {
       })
     })
     context('when category not exists', () => {
-      let res
-
       before(async () => {
         res = await app.delete('/categories/99999999')
       })
