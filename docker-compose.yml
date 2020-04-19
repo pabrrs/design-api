@@ -1,12 +1,22 @@
 version: '3.1'
 
 services:
-  mysql:
+  mysql_prod:
     image: mysql:5.7
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: design_api
-    volumes: 
+    volumes:
       - ./.docker/initdb:/docker-entrypoint-initdb.d
-    ports: 
+    ports:
       - 3306:3306
+
+  mysql_test:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: design_api_test
+    volumes:
+      - ./.docker/initdb:/docker-entrypoint-initdb.d
+    ports:
+      - 3307:3306
