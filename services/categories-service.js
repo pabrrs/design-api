@@ -23,21 +23,31 @@ module.exports = {
    * Busca todas as categorias
    * @returns {Promise<Array<Category>>}
    */
-  async list(filters, { limit = 10, offset = 0 }) {
+  async list(filters, { limit = 10, offset = 0, sort = 'name', order = 'ASC' }) {
     const query = convertQuery(filters)
+
+    const limitInt = parseInt(limit)
+    const offsetInt = parseInt(offset)
+    const sortLowerCase = sort.toLowerCase()
+    const orderUpperCase = order.toUpperCase()
+
+    if (!['id', 'name'].includes(sortLowerCase)) {
+      throw new ValidationError({ message: 'Field sort must be id|name', statusCode: 422 })
+    }
+
+    if (!['ASC', 'DESC'].includes(orderUpperCase)) {
+      throw new ValidationError({ message: 'Field order must be ASC|DESC', statusCode: 422 })
+    }
 
     const { rows, count } = await Categories.findAndCountAll({
       where: query,
-      limit: parseInt(limit),
-      offset: parseInt(offset)
+      limit: limitInt,
+      offset: offsetInt,
+      order: [[sort, orderUpperCase]]
     })
 
     return {
-      _meta: {
-        count,
-        limit: parseInt(limit),
-        offset: parseInt(offset)
-      },
+      _meta: { count, limit: limitInt, offset: offsetInt, sort: sortLowerCase, order: orderUpperCase },
       data: rows
     }
   },

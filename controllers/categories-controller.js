@@ -18,8 +18,9 @@ module.exports = {
     try {
       const { query } = req
       const { limit, offset } = query
+      const { sort, order } = query
       const { name, name__contains } = query
-      const categories = await categoriesService.list({ name, name__contains }, { limit, offset })
+      const categories = await categoriesService.list({ name, name__contains }, { limit, offset, sort, order })
       return res.status(200).json(categories)
     } catch (err) {
       return res.status(err.statusCode || 500).json({
