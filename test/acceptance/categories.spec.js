@@ -14,6 +14,7 @@ describe('[Acceptance] Categories', () => {
     ]
 
     before(async () => {
+      await Categories.truncate()
       await Categories.bulkCreate(fixtures)
     })
 
