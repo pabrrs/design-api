@@ -1,7 +1,8 @@
 const Categories = require('../models/categories')
-const NotFoundError = require('../errors/not-found-error.js')
+const NotFoundError = require('../errors/not-found-error')
 const ValidationError = require('../errors/validation-error')
 const convertQuery = require('../helpers/convert-query')
+const appConfig = require('../config/app-config')
 
 /**
  * @typedef { Object } Category
@@ -17,6 +18,15 @@ module.exports = {
    */
   _serialize(data) {
     return { id: data.id, name: data.name }
+  },
+
+  /**
+   * Monta url para um id de categoria
+   * @param { Number } id
+   * @return { String }
+   */
+  getUrl(id) {
+    return `${appConfig.url}/categories/${id}`
   },
 
   /**
