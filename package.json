@@ -40,6 +40,7 @@
     "prettier:check": "./node_modules/.bin/prettier --check \"**/{*.js,*.json,bin/**}\"",
     "start": "NODE_ENV=production node ./bin/www",
     "test": "NODE_ENV=test mocha",
+    "test:v1": "NODE_ENV=test mocha ./test/acceptance/products/v1.spec.js",
     "test:coverage-report": "nyc report --reporter=text-lcov > coverage.lcov",
     "cli": "NODE_ENV=production node --experimental-repl-await"
   },
