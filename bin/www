@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
+const { URL } = require('url')
 const app = require('../app')
 const logger = require('../clients/logger')
+const appConfig = require('../config/app-config')
 
-const PORT = process.env.NODE_PORT || 3000
+const appUrl = new URL(appConfig.url)
+const port = parseInt(appUrl.port)
 
-app.listen(PORT, () => {
-  logger.info({ message: `Listening on port ${PORT}` })
+app.listen(port, () => {
+  logger.info({ message: `Listening on port ${port}` })
 })

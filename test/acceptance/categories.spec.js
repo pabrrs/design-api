@@ -85,12 +85,12 @@ describe('[Acceptance] Categories', () => {
         })
       })
       context('sorting', () => {
-        context('when use sort', () => {
+        context('when sort by id:asc', () => {
           before(async () => {
-            res = await app.get('/categories').query({ sort: 'id' })
+            res = await app.get('/categories').query({ sort: 'id', order: 'asc' })
           })
 
-          it('should sort by gived value', () => {
+          it('should return categories ordered by id:asc', () => {
             const { _meta, data } = res.body
             expect(_meta).to.have.property('sort', 'id')
             expect(_meta).to.have.property('order', 'ASC')
@@ -98,12 +98,41 @@ describe('[Acceptance] Categories', () => {
             expect(data[4]).to.be.eql(categoriesFixtures[4])
           })
         })
-        context('when use order', () => {
+
+        context('when sort by id:desc', () => {
           before(async () => {
-            res = await app.get('/categories').query({ order: 'desc' })
+            res = await app.get('/categories').query({ sort: 'id', order: 'desc' })
           })
 
-          it('should order by gived value', () => {
+          it('should return categories ordered by id:desc', () => {
+            const { _meta, data } = res.body
+            expect(_meta).to.have.property('sort', 'id')
+            expect(_meta).to.have.property('order', 'DESC')
+            expect(data[0]).to.be.eql(categoriesFixtures[4])
+            expect(data[4]).to.be.eql(categoriesFixtures[0])
+          })
+        })
+
+        context('when sort by name:asc', () => {
+          before(async () => {
+            res = await app.get('/categories').query({ sort: 'name', order: 'asc' })
+          })
+
+          it('should return categories ordered by name:asc', () => {
+            const { _meta, data } = res.body
+            expect(_meta).to.have.property('sort', 'name')
+            expect(_meta).to.have.property('order', 'ASC')
+            expect(data[0]).to.be.eql(categoriesFixtures[0])
+            expect(data[4]).to.be.eql(categoriesFixtures[4])
+          })
+        })
+
+        context('when sort by name:desc', () => {
+          before(async () => {
+            res = await app.get('/categories').query({ sort: 'name', order: 'desc' })
+          })
+
+          it('should return categories ordered by name:asc', () => {
             const { _meta, data } = res.body
             expect(_meta).to.have.property('sort', 'name')
             expect(_meta).to.have.property('order', 'DESC')

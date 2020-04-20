@@ -15,8 +15,7 @@ Products.init(
     price: {
       type: Sequelize.DECIMAL(10, 2),
       default: 0
-    },
-    expiration_date: Sequelize.DATE
+    }
   },
   {
     tableName: 'products',
