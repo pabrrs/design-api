@@ -7,12 +7,25 @@ module.exports = {
       /** buscar dados de paginação */
       /** buscar dados de fintros */
       const products = await productsV1Service.list(/** passar dados ao service */)
-      return res.status(200).json(products)
+      /** atribuir o array de produtos na response  */
     } catch (err) {
       return res.status(err.statusCode || 500).json({
         error: err.name,
         message: err.message
       })
     }
-  }
+  },
+
+  async getById(req, res) {
+    try {
+      /** buscar o id da request */
+      const product = await productsV1Service.getById(/** passar o id */)
+      /** atribuir o produto buscado na response */
+    } catch (err) {
+      return res.status(err.statusCode || 500).json({
+        error: err.name,
+        message: err.message
+      })
+    }
+  },
 }

@@ -27,5 +27,17 @@ module.exports = {
     /** implementar paginação */
     /** implementar filtros */
     return Products.findAll()
+  },
+
+  /**
+   * Busca Produto por id
+   * @param { Number } id
+   * @returns { Promise<Product> }
+   * @throws { NotFoundError }
+   */
+  async getById(id) {
+    /** buscar produto no modelo com o método Products.findByPk */
+    /** disparar erro quando não encontrado */
+    /** retornar produto encontrado serializado  */
   }
 }
