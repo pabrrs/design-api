@@ -1,7 +1,7 @@
 const supertest = require('supertest')
-const Categories = require('../../../models/categories')
-const Products = require('../../../models/products')
-const app = supertest(require('../../../app'))
+const Categories = require('../../models/categories')
+const Products = require('../../models/products')
+const app = supertest(require('../../app'))
 
 describe('[Acceptance] Products', () => {
   let res
