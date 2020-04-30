@@ -282,4 +282,51 @@ describe('[Acceptance] Products', () => {
       })
     })
   })
+
+  describe('GET /products/:id', () => {
+    const categoryFixture = { id: 1, name: 'Games' }
+    const productFixture = { id: 1, name: 'GTA V', price: 150.0, category_id: 1 }
+
+    before(async () => {
+      await Products.truncate()
+      await Categories.truncate()
+      await Categories.create(categoryFixture)
+      await Products.create(productFixture)
+    })
+
+    after(async () => {
+      await Products.truncate()
+      await Categories.truncate()
+    })
+
+    context('when product exists', () => {
+      before(async () => {
+        res = await app.get(`/products/${productFixture.id}`)
+      })
+
+      it('should return status 200 (Ok)', () => {
+        expect(res.status).to.be.eql(200)
+      })
+
+      it('should return matching product', () => {
+        expect(res.body).to.be.eql(productFixture)
+      })
+    })
+    context('when product not exists', () => {
+      before(async () => {
+        res = await app.get('/products/99999999')
+      })
+
+      it('should return status 404 (Not Found)', () => {
+        expect(res.status).to.be.eql(404)
+      })
+
+      it('should return error message', () => {
+        expect(res.body).to.be.eql({
+          error: 'NotFoundError',
+          message: 'Product 99999999 not found'
+        })
+      })
+    })
+  })
 })
