@@ -1,5 +1,8 @@
 const Products = require('../models/products')
 
+const NotFoundError = require('../errors/not-found-error')
+const ValidationError = require('../errors/validation-error')
+
 /**
  * @typedef { Object } Product
  * @property { Number } id
@@ -14,7 +17,7 @@ module.exports = {
    * @param { Object }
    * @returns { Product }
    */
-  _serialize(data) {
+  serialize(data) {
     return { id: data.id, name: data.name, price: data.price, category_id: data.category_id }
   },
 
@@ -22,11 +25,13 @@ module.exports = {
    * Busca todas os produtos
    * @returns {Promise<Array<Product>>}
    */
-  async list() {
+  async list(filters, { limit = 10, offset = 0, sort = 'name', order = 'ASC' }) {
     /** implementar ordenação */
     /** implementar paginação */
     /** implementar filtros */
-    return Products.findAll()
+    const products = await Products.findAll()
+    /** retornar dados paginados */
+    return products
   },
 
   /**
