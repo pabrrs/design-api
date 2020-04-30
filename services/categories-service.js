@@ -16,7 +16,7 @@ module.exports = {
    * @param { Object }
    * @returns { Category }
    */
-  _serialize(data) {
+  serialize(data) {
     return { id: data.id, name: data.name }
   },
 
@@ -75,7 +75,7 @@ module.exports = {
       throw new NotFoundError({ message: `Category ${id} not found`, statusCode: 404 })
     }
 
-    return this._serialize(category)
+    return this.serialize(category)
   },
 
   /**
@@ -90,7 +90,7 @@ module.exports = {
     }
 
     const category = await Categories.create({ name })
-    return this._serialize(category)
+    return this.serialize(category)
   },
 
   /**
@@ -114,7 +114,7 @@ module.exports = {
     category.name = data.name
     await category.save()
 
-    return this._serialize(category)
+    return this.serialize(category)
   },
 
   /**
