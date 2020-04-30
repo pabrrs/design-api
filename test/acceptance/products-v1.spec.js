@@ -3,7 +3,7 @@ const Categories = require('../../models/categories')
 const Products = require('../../models/products')
 const app = supertest(require('../../app'))
 
-describe('[Acceptance] Products', () => {
+describe('[Acceptance] Products V1', () => {
   let res
   describe('GET /v1/products', () => {
     const categoriesFixtures = [{ id: 1, name: 'Móveis' }, { id: 2, name: 'Informática' }]
