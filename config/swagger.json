@@ -12,7 +12,6 @@
     "servers": [
         {
             "url": "http://localhost:3000",
-            "variables": {},
             "description": "Local"
         }
     ],
@@ -20,7 +19,6 @@
         "/categories": {
             "get": {
                 "summary": "Listar categorias",
-                "operationId": "listCategories",
                 "parameters": [
                     {
                         "in": "query",
@@ -139,6 +137,175 @@
                     },
                     "422": {
                         "description": "ValidationError | Campos inválidos"
+                    },
+                    "500": {
+                        "description": "InternalServerError | Erro não identificado"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Cria categoria",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "required": true,
+                                        "description": "Nome da categoria"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Categoria criada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "number",
+                                            "description": "Id da categoria"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Nome da categoria"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "ValidationError | Campos inválidos"
+                    },
+                    "500": {
+                        "description": "InternalServerError | Erro não identificado"
+                    }
+                }
+            }
+        },
+        "/categories/:id": {
+            "get": {
+                "summary": "Busca categoria por ID",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "description": "Id da categoria buscada"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorna categoria buscada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "number",
+                                            "description": "Id da categoria"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Nome da categoria"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NotFoundError | Categoria não encontrada"
+                    },
+                    "422": {
+                        "description": "ValidationError | Campos inválidos"
+                    },
+                    "500": {
+                        "description": "InternalServerError | Erro não identificado"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Editar uma categoria",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "number",
+                            "required": true
+                        },
+                        "description": "Id da categoria"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "required": false,
+                                        "description": "Nome da categoria"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Categoria atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "number",
+                                            "description": "Id da categoria"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Nome da categoria"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NotFoundError | Categoria não encontrada"
+                    },
+                    "422": {
+                        "description": "ValidationError | Campos inválidos"
+                    },
+                    "500": {
+                        "description": "InternalServerError | Erro não identificado"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remover uma categoria",
+                "responses": {
+                    "200": {
+                        "description": "Categoria removida com sucesso"
+                    },
+                    "404": {
+                        "description": "NotFoundError | Categoria não encontrada"
                     },
                     "500": {
                         "description": "InternalServerError | Erro não identificado"
