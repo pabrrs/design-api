@@ -41,7 +41,8 @@
     "start": "NODE_ENV=production node ./bin/www",
     "debug": "NODE_ENV=production node --inspect ./bin/www",
     "test": "NODE_ENV=test mocha",
-    "test:v1": "NODE_ENV=test mocha ./test/acceptance/products/v1.spec.js",
+    "test:v1": "NODE_ENV=test mocha ./test/acceptance/products-v1.spec.js",
+    "test:v2": "NODE_ENV=test mocha ./test/acceptance/products-v2.spec.js",
     "test:coverage-report": "nyc report --reporter=text-lcov > coverage.lcov",
     "cli": "NODE_ENV=production node --experimental-repl-await"
   },
