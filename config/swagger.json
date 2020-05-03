@@ -83,178 +83,65 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Retorna categorias",
+                        "description": "Retorna categorias paginadas",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Categories"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "seller_id não foi informado",
-                        "content": {}
-                    }
-                }
-            }
-        },
-        "/seller/<seller_id>/simulations": {
-            "post": {
-                "summary": "Busca simulações de crédito do seller_id para um valor informado",
-                "operationId": "getSimulations",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "seller_id",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Id do seller"
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "description": "Valor para ser simulado",
-                                "properties": {
-                                    "total_amount": {
-                                        "type": "number"
+                                    "type": "object",
+                                    "properties": {
+                                        "_meta": {
+                                            "description": "Metadados da paginação",
+                                            "type": "object",
+                                            "properties": {
+                                                "count": {
+                                                    "type": "number",
+                                                    "description": "Quantidade de categorias"
+                                                },
+                                                "limit": {
+                                                    "type": "number",
+                                                    "description": "Campo limit solicitado"
+                                                },
+                                                "offset": {
+                                                    "type": "number",
+                                                    "description": "Campo offset solicitado"
+                                                },
+                                                "sort": {
+                                                    "type": "string",
+                                                    "description": "Campo de ordenação utilizado"
+                                                },
+                                                "order": {
+                                                    "type": "string",
+                                                    "description": "Direção da ordenação utilizada"
+                                                }
+                                            }
+                                        },
+                                        "data": {
+                                            "description": "Lista de categorias",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number",
+                                                        "description": "Id da categoria"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "description": "Nome da categoria"
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
-                                },
-                                "required": [
-                                    "total_amount"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Retorna simulações para o valor",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/CreditInfo/properties/simulations"
                                 }
                             }
                         }
                     },
                     "422": {
-                        "description": "total_amount|seller_id não informados ou incorretos",
-                        "content": {}
-                    }
-                }
-            }
-        }
-    },
-    "components": {
-        "schemas": {
-            "CreditInfo": {
-                "type": "object",
-                "properties": {
-                    "hasCredit": {
-                        "type": "boolean",
-                        "default": false,
-                        "description": "Indica se seller tem crédito"
+                        "description": "ValidationError | Campos inválidos"
                     },
-                    "totalAmount": {
-                        "type": "number",
-                        "description": "Limite de crédito solicitado para simulação"
-                    },
-                    "loanRate": {
-                        "type": "number",
-                        "description": "Taxa de empréstimo"
-                    },
-                    "simulations": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "simulationHash": {
-                                    "type": "string",
-                                    "description": "Identificador do parcelamento"
-                                },
-                                "termInMonth": {
-                                    "type": "number",
-                                    "description": "Quantidade de parcelas"
-                                },
-                                "paymentDescription": {
-                                    "type": "string",
-                                    "description": "Texto de apoio"
-                                },
-                                "totalAmount": {
-                                    "type": "number",
-                                    "description": "Limite de crédito solicitado para simulação"
-                                },
-                                "paymentAmount": {
-                                    "type": "number",
-                                    "description": "Valor da parcela"
-                                },
-                                "iofAmount": {
-                                    "type": "number",
-                                    "description": "Valor do IOF"
-                                },
-                                "cetAnnual": {
-                                    "type": "number",
-                                    "description": "Valor do CET anual"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "Loan": {
-                "type": "object",
-                "properties": {
-                    "loanId": {
-                        "type": "string",
-                        "description": "Id do empréstimo"
-                    },
-                    "termInMonths": {
-                        "type": "string",
-                        "description": "Quantidade de parcelas"
-                    },
-                    "totalAmount": {
-                        "type": "number",
-                        "description": "Limite de crédito solicitado para simulação"
-                    },
-                    "paymentAmount": {
-                        "type": "number",
-                        "description": "Valor da parcela"
-                    },
-                    "paymentDescription": {
-                        "type": "string",
-                        "description": "Texto de apoio"
-                    },
-                    "account": {
-                        "type": "object",
-                        "description": "Dados da conta bancária",
-                        "properties": {
-                            "bankId": {
-                                "type": "number",
-                                "description": "Código do banco"
-                            },
-                            "bankName": {
-                                "type": "string",
-                                "description": "Nome do banco"
-                            },
-                            "agencyId": {
-                                "type": "string",
-                                "description": "Código da agência"
-                            },
-                            "accountNumber": {
-                                "type": "number",
-                                "description": "Número da conta"
-                            },
-                            "accountDigit": {
-                                "type": "string",
-                                "description": "Dígito verificador da conta"
-                            }
-                        }
+                    "500": {
+                        "description": "InternalServerError | Erro não identificado"
                     }
                 }
             }
