@@ -2,6 +2,7 @@ const supertest = require('supertest')
 const Categories = require('../../models/categories')
 const Products = require('../../models/products')
 const appConfig = require('../../config/app-config')
+const swaggerConfig = require('../../config/swagger.json')
 const app = supertest(require('../../app'))
 
 describe('[Acceptance] Products V3', () => {
@@ -71,12 +72,14 @@ describe('[Acceptance] Products V3', () => {
   })
 
   describe('/docs', () => {
-    before(async () => {
-      res = await app.get('/docs')
+    it('should document /v1/products', () => {
+      expect(swaggerConfig.paths['/v1/products']).to.be.an('object')
     })
-
-    it('should document /v1/products', () => {})
-    it('should document /v2/products', () => {})
-    it('should document /v3/products', () => {})
+    it('should document /v2/products', () => {
+      expect(swaggerConfig.paths['/v2/products']).to.be.an('object')
+    })
+    it('should document /v3/products', () => {
+      expect(swaggerConfig.paths['/v3/products']).to.be.an('object')
+    })
   })
 })
