@@ -23,7 +23,6 @@ module.exports = {
 
   /**
    * Busca todas os produtos
-   * @returns {Promise<Array<Product>>}
    */
   async list(filters, { limit = 10, offset = 0, sort = 'name', order = 'ASC' }) {
     /** implementar ordenação */
