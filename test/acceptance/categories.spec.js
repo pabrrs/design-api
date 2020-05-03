@@ -1,5 +1,6 @@
 const supertest = require('supertest')
 const Categories = require('../../models/categories')
+const swaggerConfig = require('../../config/swagger.json')
 const app = supertest(require('../../app'))
 
 describe('[Acceptance] Categories', () => {
@@ -391,6 +392,12 @@ describe('[Acceptance] Categories', () => {
           message: 'Category 99999999 not found'
         })
       })
+    })
+  })
+
+  describe('/docs', () => {
+    it('should document /categories', () => {
+      expect(swaggerConfig.paths['/categories']).to.be.an('object')
     })
   })
 })

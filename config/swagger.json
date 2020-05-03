@@ -1,0 +1,263 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "design-api",
+        "description": "Exercícios práticos das aulas de Design de API",
+        "version": "0.1.0"
+    },
+    "externalDocs": {
+        "description": "Ver no Github",
+        "url": "https://github.com/b2wads/design-api"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "variables": {},
+            "description": "Local"
+        }
+    ],
+    "paths": {
+        "/categories": {
+            "get": {
+                "summary": "Listar categorias",
+                "operationId": "listCategories",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "name",
+                        "schema": {
+                            "type": "string",
+                            "required": false
+                        },
+                        "description": "Busca por categoria com name igual"
+                    },
+                    {
+                        "in": "query",
+                        "name": "name__contains",
+                        "schema": {
+                            "type": "string",
+                            "required": false
+                        },
+                        "description": "Busca categorias onde name contém o valor informado"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "type": "number",
+                            "required": false,
+                            "default": 10
+                        },
+                        "description": "Números de categorias para serem retornadas"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "schema": {
+                            "type": "number",
+                            "required": false,
+                            "default": 0
+                        },
+                        "description": "Posição onde deve iniciar a contagem na lista de categorias"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sort",
+                        "schema": {
+                            "type": "string",
+                            "required": false,
+                            "default": "name"
+                        },
+                        "description": "Campo para ordenar categorias"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "schema": {
+                            "type": "string",
+                            "required": false,
+                            "default": "ASC"
+                        },
+                        "description": "Direção da ordenação"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorna categorias",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Categories"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "seller_id não foi informado",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/seller/<seller_id>/simulations": {
+            "post": {
+                "summary": "Busca simulações de crédito do seller_id para um valor informado",
+                "operationId": "getSimulations",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "seller_id",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Id do seller"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "description": "Valor para ser simulado",
+                                "properties": {
+                                    "total_amount": {
+                                        "type": "number"
+                                    }
+                                },
+                                "required": [
+                                    "total_amount"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Retorna simulações para o valor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreditInfo/properties/simulations"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "total_amount|seller_id não informados ou incorretos",
+                        "content": {}
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreditInfo": {
+                "type": "object",
+                "properties": {
+                    "hasCredit": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Indica se seller tem crédito"
+                    },
+                    "totalAmount": {
+                        "type": "number",
+                        "description": "Limite de crédito solicitado para simulação"
+                    },
+                    "loanRate": {
+                        "type": "number",
+                        "description": "Taxa de empréstimo"
+                    },
+                    "simulations": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "simulationHash": {
+                                    "type": "string",
+                                    "description": "Identificador do parcelamento"
+                                },
+                                "termInMonth": {
+                                    "type": "number",
+                                    "description": "Quantidade de parcelas"
+                                },
+                                "paymentDescription": {
+                                    "type": "string",
+                                    "description": "Texto de apoio"
+                                },
+                                "totalAmount": {
+                                    "type": "number",
+                                    "description": "Limite de crédito solicitado para simulação"
+                                },
+                                "paymentAmount": {
+                                    "type": "number",
+                                    "description": "Valor da parcela"
+                                },
+                                "iofAmount": {
+                                    "type": "number",
+                                    "description": "Valor do IOF"
+                                },
+                                "cetAnnual": {
+                                    "type": "number",
+                                    "description": "Valor do CET anual"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Loan": {
+                "type": "object",
+                "properties": {
+                    "loanId": {
+                        "type": "string",
+                        "description": "Id do empréstimo"
+                    },
+                    "termInMonths": {
+                        "type": "string",
+                        "description": "Quantidade de parcelas"
+                    },
+                    "totalAmount": {
+                        "type": "number",
+                        "description": "Limite de crédito solicitado para simulação"
+                    },
+                    "paymentAmount": {
+                        "type": "number",
+                        "description": "Valor da parcela"
+                    },
+                    "paymentDescription": {
+                        "type": "string",
+                        "description": "Texto de apoio"
+                    },
+                    "account": {
+                        "type": "object",
+                        "description": "Dados da conta bancária",
+                        "properties": {
+                            "bankId": {
+                                "type": "number",
+                                "description": "Código do banco"
+                            },
+                            "bankName": {
+                                "type": "string",
+                                "description": "Nome do banco"
+                            },
+                            "agencyId": {
+                                "type": "string",
+                                "description": "Código da agência"
+                            },
+                            "accountNumber": {
+                                "type": "number",
+                                "description": "Número da conta"
+                            },
+                            "accountDigit": {
+                                "type": "string",
+                                "description": "Dígito verificador da conta"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
