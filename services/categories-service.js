@@ -33,7 +33,7 @@ module.exports = {
    * Busca todas as categorias
    * @returns {Promise<Array<Category>>}
    */
-  async list(filters, { limit = 10, offset = 0, sort = 'name', order = 'ASC' }) {
+  async list(filters, { limit = 10, offset = 0, sort = 'id', order = 'ASC' }) {
     const query = convertQuery(filters)
 
     const limitInt = parseInt(limit)
