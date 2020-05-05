@@ -24,7 +24,7 @@ module.exports = {
   /**
    * Busca todas os produtos
    */
-  async list(filters, { limit = 10, offset = 0, sort = 'name', order = 'ASC' }) {
+  async list(filters, { limit = 10, offset = 0, sort = 'id', order = 'ASC' }) {
     /** implementar ordenação */
     /** implementar paginação */
     /** implementar filtros */
