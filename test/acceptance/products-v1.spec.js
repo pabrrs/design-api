@@ -55,9 +55,9 @@ describe('[Acceptance] Products', () => {
         expect(_meta).to.have.property('offset', 0)
       })
 
-      it('should default sort by name with order ASC', () => {
+      it('should default sort by id with order ASC', () => {
         const { _meta, data } = res.body
-        expect(_meta).to.have.property('sort', 'name')
+        expect(_meta).to.have.property('sort', 'id')
         expect(_meta).to.have.property('order', 'ASC')
         expect(data[0]).to.be.eql(productsFixtures[0])
         expect(data[5]).to.be.eql(productsFixtures[5])
