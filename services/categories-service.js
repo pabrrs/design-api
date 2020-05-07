@@ -16,7 +16,7 @@ module.exports = {
    * @param { Object }
    * @returns { Category }
    */
-  _serialize(data) {
+  serialize(data) {
     return { id: data.id, name: data.name }
   },
 
@@ -31,7 +31,6 @@ module.exports = {
 
   /**
    * Busca todas as categorias
-   * @returns {Promise<Array<Category>>}
    */
   async list(filters, { limit = 10, offset = 0, sort = 'id', order = 'ASC' }) {
     const query = convertQuery(filters)
@@ -56,9 +55,11 @@ module.exports = {
       order: [[sort, orderUpperCase]]
     })
 
+    const categories = rows.map(c => this.serialize(c))
+
     return {
       _meta: { count, limit: limitInt, offset: offsetInt, sort: sortLowerCase, order: orderUpperCase },
-      data: rows
+      data: categories
     }
   },
 
@@ -75,7 +76,7 @@ module.exports = {
       throw new NotFoundError({ message: `Category ${id} not found`, statusCode: 404 })
     }
 
-    return this._serialize(category)
+    return this.serialize(category)
   },
 
   /**
@@ -90,7 +91,7 @@ module.exports = {
     }
 
     const category = await Categories.create({ name })
-    return this._serialize(category)
+    return this.serialize(category)
   },
 
   /**
@@ -114,7 +115,7 @@ module.exports = {
     category.name = data.name
     await category.save()
 
-    return this._serialize(category)
+    return this.serialize(category)
   },
 
   /**
