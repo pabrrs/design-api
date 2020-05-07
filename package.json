@@ -1,11 +1,15 @@
 {
-  "name": "nodejs-boilerplate",
+  "name": "design-api",
   "version": "0.1.0",
-  "description": "Boilerplate para projetos NodeJS",
+  "description": "Projeto template para Desing de API",
   "main": "app.js",
   "dependencies": {
+    "@b2wads/env-o-loader": "^1.0.1",
     "@b2wads/logger": "1.0.3",
-    "express": "4.17.0"
+    "express": "4.17.0",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.6",
+    "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
     "acorn": "^7.1.0",
@@ -27,7 +31,7 @@
     "supertest": "4.0.2"
   },
   "scripts": {
-    "deps": "docker-compose up --build --force-recreate",
+    "deps": "docker-compose up --force-recreate --renew-anon-volumes",
     "eslint": "./node_modules/.bin/eslint --fix .",
     "eslint:check": "./node_modules/.bin/eslint .",
     "fix:<fix-name>": "node scripts/fix-<fix-name>.js",
@@ -35,21 +39,22 @@
     "fmt:check": "npm run prettier:check && npm run eslint:check",
     "prettier": "./node_modules/.bin/prettier --write \"**/{*.js,*.json,bin/**}\"",
     "prettier:check": "./node_modules/.bin/prettier --check \"**/{*.js,*.json,bin/**}\"",
-    "start": "node ./bin/www",
-    "test": "./node_modules/.bin/nyc mocha --reporter spec",
+    "start": "NODE_ENV=production node ./bin/www",
+    "debug": "NODE_ENV=production node --inspect ./bin/www",
+    "test": "NODE_ENV=test mocha",
+    "test:v1": "NODE_ENV=test mocha ./test/acceptance/products-v1.spec.js",
+    "test:v2": "NODE_ENV=test mocha ./test/acceptance/products-v2.spec.js",
+    "test:v3": "NODE_ENV=test mocha ./test/acceptance/products-v3.spec.js",
     "test:coverage-report": "nyc report --reporter=text-lcov > coverage.lcov",
-    "test:acceptance": "npm t test/acceptance/*",
-    "test:integration": "npm t test/integration/*",
-    "test:unit": "npm t test/unit/*",
-    "worker:<worker-name>": "node workers/<worker-name.js>"
+    "cli": "NODE_ENV=production node --experimental-repl-await"
   },
   "repository": {
     "type": "git",
-    "url": "github.com:b2wads/nodejs-boilerplate"
+    "url": "github.com:b2wads/design-api"
   },
   "keywords": [
     "nodejs",
-    "boilerplate",
+    "design-api",
     "webapp",
     "worker"
   ],
