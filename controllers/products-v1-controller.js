@@ -5,7 +5,7 @@ module.exports = {
     try {
       /** buscar dados de ordenção */
       /** buscar dados de paginação */
-      /** buscar dados de fintros */
+      /** buscar dados de filtros */
       const products = await productsV1Service.list(/** passar dados ao service */)
       /** atribuir o array de produtos na response  */
     } catch (err) {
@@ -27,5 +27,5 @@ module.exports = {
         message: err.message
       })
     }
-  },
+  }
 }

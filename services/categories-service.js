@@ -31,7 +31,6 @@ module.exports = {
 
   /**
    * Busca todas as categorias
-   * @returns {Promise<Array<Category>>}
    */
   async list(filters, { limit = 10, offset = 0, sort = 'id', order = 'ASC' }) {
     const query = convertQuery(filters)
@@ -56,9 +55,11 @@ module.exports = {
       order: [[sort, orderUpperCase]]
     })
 
+    const categories = rows.map(c => this.serialize(c))
+
     return {
       _meta: { count, limit: limitInt, offset: offsetInt, sort: sortLowerCase, order: orderUpperCase },
-      data: rows
+      data: categories
     }
   },
 

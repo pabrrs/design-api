@@ -20,7 +20,7 @@ module.exports = {
    */
   async create({ name, price, category_id }) {
     if (!name || name === '') {
-      throw new /** adicionar classe de erro com status code */
+      /** adicionar classe de erro com status code */
     }
 
     const product = await Products.update(/** atualizar model */)
@@ -45,11 +45,11 @@ module.exports = {
     product.name = data.name
 
     if (data.price) {
-        /** atualizar price caso seja passado */
+      /** atualizar price caso seja passado */
     }
 
     if (data.category_id) {
-        /** atualizar category_id caso seja passado */
+      /** atualizar category_id caso seja passado */
     }
 
     /** salvar produto atualizado */
