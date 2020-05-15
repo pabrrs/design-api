@@ -10,6 +10,7 @@ Durante as aulas iremos utilizar as ferramentas citadas abaixo:
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm)
+- [Postman](https://www.postman.com/downloads/)
 
 # Instruções iniciais
 
