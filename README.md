@@ -231,6 +231,15 @@ Resultado deve ser parecido com:
   7 passing
 ```
 
+# Salvando as alterações
+
+Ao final de cada aula, você pode executar os seguintes comandos para salvar suas alterações no seu repositório:
+
+```sh
+git commit -am "descreva aqui o que foi feito"
+git push
+```
+
 # Comandos auxiliares
 
 - `npm run test`: Executa todos os testes da aplicação
