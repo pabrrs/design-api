@@ -2,7 +2,7 @@
 
 Projeto para aulas práticas de **Design de API**, no programa de estágio da B2W Digital.
 
-# Ferramentas Necessárias
+# Ferramentas necessárias
 
 Durante as aulas iremos utilizar as ferramentas citadas abaixo:
 
