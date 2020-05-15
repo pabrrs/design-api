@@ -27,7 +27,7 @@ Dessa forma você terá uma cópia sua do projeto, para utilizar nas aulas.
 
 ## Baixe o projeto localmente na sua máquina
 
-Na página do seu projeto na sua conta do Github, blique no botão **Clone or Download**, então copie a URL exibida:
+Na página do seu projeto na sua conta do Github, clique no botão **Clone or Download**, então copie a URL exibida:
 
 ![image](https://user-images.githubusercontent.com/20517508/82050276-3b24a080-968e-11ea-9fb8-3a56ab9e43cd.png)
 
