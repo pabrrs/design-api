@@ -68,17 +68,17 @@ npm install
 
 Para inicializar a aplicação, certifique-se de ter executado todas as etadas descritas em [Instruções inciais](#instruções-iniciais), então execute os:
 
-Inicialize as dependências:
+## Inicialize as dependências:
 ```
 npm run deps
 ```
 
-Mude para a versão do Node utilizada no projeto:
+## Mude para a versão do Node utilizada no projeto:
 ```
 nvm use
 ```
 
-Inicie a API:
+## Inicie a API:
 ```
 npm start
 ```
