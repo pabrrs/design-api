@@ -4,7 +4,6 @@ const categoriesRoute = require('./routes/categories-route')
 const productsRoute = require('./routes/products-route')
 const swaggerConfig = require('./config/swagger.json')
 
-
 // Inicializa express
 const app = express()
 

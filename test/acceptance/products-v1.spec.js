@@ -259,7 +259,7 @@ describe('[Acceptance] Products V1', () => {
             expect(_meta).to.have.property('count', 3)
             expect(data).to.be.eql([
               { id: 2, name: 'Cadeira', price: 200.0, category_id: 1 },
-              { id: 3, name: 'Mesa', price: 350.0, category_id: 2 },
+              { id: 3, name: 'Mesa', price: 350.0, category_id: 1 },
               { id: 4, name: 'Monitor', price: 250.0, category_id: 2 }
             ])
           })
@@ -272,7 +272,7 @@ describe('[Acceptance] Products V1', () => {
 
           it('should return with price less then or equal', () => {
             const { _meta, data } = res.body
-            expect(_meta).to.have.property('count', 3)
+            expect(_meta).to.have.property('count', 2)
             expect(data).to.be.eql([
               { id: 5, name: 'Mouse', price: 80.0, category_id: 2 },
               { id: 6, name: 'Teclado', price: 100.0, category_id: 2 }
@@ -283,7 +283,7 @@ describe('[Acceptance] Products V1', () => {
     })
   })
 
-  describe('GET /products/:id', () => {
+  describe('GET /v1/products/:id', () => {
     const categoryFixture = { id: 1, name: 'Games' }
     const productFixture = { id: 1, name: 'GTA V', price: 150.0, category_id: 1 }
 
@@ -301,7 +301,7 @@ describe('[Acceptance] Products V1', () => {
 
     context('when product exists', () => {
       before(async () => {
-        res = await app.get(`/products/${productFixture.id}`)
+        res = await app.get(`/v1/products/${productFixture.id}`)
       })
 
       it('should return status 200 (Ok)', () => {
@@ -314,7 +314,7 @@ describe('[Acceptance] Products V1', () => {
     })
     context('when product not exists', () => {
       before(async () => {
-        res = await app.get('/products/99999999')
+        res = await app.get('/v1/products/99999999')
       })
 
       it('should return status 404 (Not Found)', () => {
